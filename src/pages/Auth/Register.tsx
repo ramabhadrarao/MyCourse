@@ -1,7 +1,9 @@
+// src/pages/Auth/Register.tsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { BookOpen, Mail, Lock, User, UserCheck } from 'lucide-react';
+import { BookOpen, Mail, Lock, User, UserCheck, AlertCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +29,7 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
@@ -35,9 +37,17 @@ const Register: React.FC = () => {
 
     try {
       await register(formData.name, formData.email, formData.password, formData.role);
-      navigate('/dashboard');
-    } catch (error) {
-      // Error handled in AuthContext
+      
+      if (formData.role === 'instructor') {
+        toast.success('Registration successful! Your account needs admin approval before you can login.', {
+          duration: 5000
+        });
+        navigate('/login');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (error: any) {
+      // Error is already handled in AuthContext with toast
     } finally {
       setLoading(false);
     }
@@ -122,6 +132,26 @@ const Register: React.FC = () => {
                   <option value="instructor">Instructor</option>
                 </select>
               </div>
+              {formData.role === 'instructor' && (
+                <div className="mt-2 rounded-md bg-yellow-50 p-4">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <AlertCircle className="h-5 w-5 text-yellow-400" />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-yellow-800">
+                        Instructor Account Approval Required
+                      </h3>
+                      <div className="mt-2 text-sm text-yellow-700">
+                        <p>
+                          Instructor accounts require admin approval before you can log in. 
+                          You'll receive an email once your account is approved.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>

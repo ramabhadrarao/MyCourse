@@ -1,3 +1,4 @@
+// src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -89,6 +90,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         password,
         role,
       });
+
+      // Check if the response indicates instructor needs approval
+      if (response.data.requiresApproval) {
+        // Don't log in the user, just show the message
+        return;
+      }
 
       const { token, user } = response.data;
       localStorage.setItem('token', token);

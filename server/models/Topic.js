@@ -1,3 +1,4 @@
+// server/models/Topic.js
 const mongoose = require('mongoose');
 
 const topicSchema = new mongoose.Schema({
@@ -11,6 +12,11 @@ const topicSchema = new mongoose.Schema({
     ref: 'Course',
     required: true
   },
+  parentTopic: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Topic',
+    default: null
+  },
   order: {
     type: Number,
     required: true
@@ -18,6 +24,10 @@ const topicSchema = new mongoose.Schema({
   contents: [{
     type: mongoose.Schema.ObjectId,
     ref: 'Content'
+  }],
+  subTopics: [{
+    type: mongoose.Schema.ObjectId,
+    ref: 'Topic'
   }]
 }, {
   timestamps: true

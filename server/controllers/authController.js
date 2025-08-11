@@ -1,3 +1,4 @@
+// server/controllers/authController.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -28,13 +29,26 @@ const register = async (req, res) => {
       });
     }
 
+    // Set approval status based on role
+    const isApproved = role !== 'instructor'; // Instructors need approval
+
     // Create user
     const user = await User.create({
       name,
       email,
       password,
-      role: role || 'student'
+      role: role || 'student',
+      isApproved,
+      isActive: true
     });
+
+    if (role === 'instructor') {
+      return res.status(201).json({
+        success: true,
+        message: 'Registration successful! Your account needs admin approval before you can login.',
+        requiresApproval: true
+      });
+    }
 
     const token = generateToken(user._id);
 
@@ -78,6 +92,22 @@ const login = async (req, res) => {
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
+      });
+    }
+
+    // Check if user is active
+    if (!user.isActive) {
+      return res.status(401).json({
+        success: false,
+        message: 'Your account has been deactivated. Please contact support.'
+      });
+    }
+
+    // Check if instructor is approved
+    if (user.role === 'instructor' && !user.isApproved) {
+      return res.status(401).json({
+        success: false,
+        message: 'Your instructor account is pending admin approval.'
       });
     }
 

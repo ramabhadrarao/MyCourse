@@ -5,6 +5,7 @@ const connectDB = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const contentRoutes = require('./routes/contentRoutes');
+const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middleware/errorHandler');
 
 // Load environment variables
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/content', contentRoutes);
+app.use('/api/users', userRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

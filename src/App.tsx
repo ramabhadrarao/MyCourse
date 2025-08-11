@@ -1,3 +1,4 @@
+// src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -10,7 +11,11 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import CourseDetail from './pages/Courses/CourseDetail';
 import CreateCourse from './pages/Courses/CreateCourse';
 import EditCourse from './pages/Courses/EditCourse';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import StudentManagement from './pages/Admin/StudentManagement';
+import InstructorManagement from './pages/Admin/InstructorManagement';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import AdminRoute from './components/Auth/AdminRoute';
 
 function App() {
   return (
@@ -46,6 +51,31 @@ function App() {
                   <ProtectedRoute>
                     <EditCourse />
                   </ProtectedRoute>
+                }
+              />
+              {/* Admin Routes */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/users/students"
+                element={
+                  <AdminRoute>
+                    <StudentManagement />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/users/instructors"
+                element={
+                  <AdminRoute>
+                    <InstructorManagement />
+                  </AdminRoute>
                 }
               />
             </Routes>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { BookOpen, User, LogOut, Plus, Home } from 'lucide-react';
+import { BookOpen, User, LogOut, Plus, Home, Shield } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -32,13 +32,23 @@ const Navbar: React.FC = () => {
                   <span>Home</span>
                 </Link>
                 
-                <Link
-                  to="/dashboard"
-                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
-                >
-                  <User className="h-4 w-4" />
-                  <span>Dashboard</span>
-                </Link>
+                {user.role === 'admin' ? (
+                  <Link
+                    to="/admin/dashboard"
+                    className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                  >
+                    <Shield className="h-4 w-4" />
+                    <span>Admin</span>
+                  </Link>
+                ) : (
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                )}
 
                 {(user.role === 'instructor' || user.role === 'admin') && (
                   <Link
@@ -53,6 +63,11 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <span className="text-sm text-gray-700">
                     Welcome, {user.name}
+                    {user.role === 'admin' && (
+                      <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+                        Admin
+                      </span>
+                    )}
                   </span>
                   <button
                     onClick={handleLogout}

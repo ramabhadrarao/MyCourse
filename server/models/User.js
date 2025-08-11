@@ -27,6 +27,14 @@ const userSchema = new mongoose.Schema({
     enum: ['student', 'instructor', 'admin'],
     default: 'student'
   },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  isApproved: {
+    type: Boolean,
+    default: true
+  },
   enrolledCourses: [{
     type: mongoose.Schema.ObjectId,
     ref: 'Course'
@@ -57,4 +65,4 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema)
