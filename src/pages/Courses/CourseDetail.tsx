@@ -198,165 +198,166 @@ const CourseDetail: React.FC = () => {
     }
   };
 
-  const renderContent = (content: Content) => {
-    switch (content.type) {
-      case 'text':
-        const textData = getData(content, 'text');
-        return (
-          <div 
-            className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: textData?.text || '' }}
-          />
-        );
-      
-      case 'code':
-        const codeData = getData(content, 'code');
-        return (
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <div className="text-sm text-gray-400 mb-2">
-              {codeData?.language || 'javascript'}
-            </div>
-            <pre className="text-green-400">
-              <code>{codeData?.code || ''}</code>
-            </pre>
+  // Update this function in src/pages/Courses/CourseDetail.tsx
+
+const renderContent = (content: Content) => {
+  switch (content.type) {
+    case 'text':
+      const textData = getData(content, 'text');
+      return (
+        <div 
+          className="prose prose-sm sm:prose lg:prose-lg max-w-none"
+          dangerouslySetInnerHTML={{ __html: textData?.text || '' }}
+        />
+      );
+    
+    case 'code':
+      const codeData = getData(content, 'code');
+      return (
+        <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+          <div className="text-sm text-gray-400 mb-2">
+            {codeData?.language || 'javascript'}
           </div>
-        );
-      
-      case 'video':
-        const videoData = getData(content, 'video');
-        if (videoData?.url) {
-          const videoId = videoData.videoId || videoData.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
-          if (videoId) {
-            return (
-              <div className="aspect-video">
-                <iframe
-                  src={`https://www.youtube.com/embed/${videoId}`}
-                  title={content.title}
-                  className="w-full h-full rounded-lg"
-                  allowFullScreen
-                />
-              </div>
-            );
-          }
+          <pre className="text-green-400">
+            <code>{codeData?.code || ''}</code>
+          </pre>
+        </div>
+      );
+    
+    case 'video':
+      const videoData = getData(content, 'video');
+      if (videoData?.url) {
+        const videoId = videoData.videoId || videoData.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+        if (videoId) {
+          return (
+            <div className="aspect-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}`}
+                title={content.title}
+                className="w-full h-full rounded-lg"
+                allowFullScreen
+              />
+            </div>
+          );
         }
-        return <div className="text-gray-500">Video not available</div>;
-      
-      case 'pdf':
-        const pdfData = getData(content, 'pdf');
-        return (
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center space-x-2">
-              <FileText className="h-6 w-6 text-red-600" />
-              <div>
-                <p className="font-medium">{pdfData?.originalName || 'PDF Document'}</p>
-                <p className="text-sm text-gray-500">
-                  PDF Document • {pdfData?.size ? (pdfData.size / 1024 / 1024).toFixed(2) : '0'} MB
-                </p>
-              </div>
+      }
+      return <div className="text-gray-500">Video not available</div>;
+    
+    case 'pdf':
+      const pdfData = getData(content, 'pdf');
+      return (
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center space-x-2">
+            <FileText className="h-6 w-6 text-red-600" />
+            <div>
+              <p className="font-medium">{pdfData?.originalName || 'PDF Document'}</p>
+              <p className="text-sm text-gray-500">
+                PDF Document • {pdfData?.size ? (pdfData.size / 1024 / 1024).toFixed(2) : '0'} MB
+              </p>
             </div>
-            {pdfData?.url && (
-              <a
-                href={pdfData.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-3 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Open PDF
-              </a>
-            )}
           </div>
-        );
+          {pdfData?.url && (
+            <a
+              href={pdfData.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-3 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Open PDF
+            </a>
+          )}
+        </div>
+      );
+    
+    case 'table':
+      const tableData = getData(content, 'table');
+      const tableStyle = tableData?.style || 'default';
       
-      case 'table':
-        const tableData = getData(content, 'table');
-        const tableStyle = tableData?.style || 'default';
-        
-        return (
-          <div className="overflow-x-auto">
-            <table className={`min-w-full divide-y divide-gray-200 ${
-              tableStyle === 'bordered' ? 'border border-gray-300' : ''
-            } rounded-lg overflow-hidden`}>
-              <thead className="bg-gray-50">
-                <tr>
-                  {tableData?.headers?.map((header: string, index: number) => (
-                    <th
-                      key={index}
-                      className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
+      return (
+        <div className="overflow-x-auto">
+          <table className={`min-w-full divide-y divide-gray-200 ${
+            tableStyle === 'bordered' ? 'border border-gray-300' : ''
+          } rounded-lg overflow-hidden`}>
+            <thead className="bg-gray-50">
+              <tr>
+                {tableData?.headers?.map((header: string, index: number) => (
+                  <th
+                    key={index}
+                    className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                      tableStyle === 'bordered' ? 'border border-gray-300' : ''
+                    }`}
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {tableData?.rows?.map((row: string[], rowIndex: number) => (
+                <tr key={rowIndex} className={
+                  tableStyle === 'striped' && rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+                }>
+                  {row.map((cell: string, cellIndex: number) => (
+                    <td
+                      key={cellIndex}
+                      className={`px-6 py-4 whitespace-nowrap text-sm text-gray-900 ${
                         tableStyle === 'bordered' ? 'border border-gray-300' : ''
                       }`}
                     >
-                      {header}
-                    </th>
+                      {cell}
+                    </td>
                   ))}
                 </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {tableData?.rows?.map((row: string[], rowIndex: number) => (
-                  <tr key={rowIndex} className={
-                    tableStyle === 'striped' && rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-                  }>
-                    {row.map((cell: string, cellIndex: number) => (
-                      <td
-                        key={cellIndex}
-                        className={`px-6 py-4 whitespace-nowrap text-sm text-gray-900 ${
-                          tableStyle === 'bordered' ? 'border border-gray-300' : ''
-                        }`}
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
-      
-      case 'image':
-        const imageData = getData(content, 'image');
-        return (
-          <div className="space-y-2">
-            {imageData?.url && (
-              <img
-                src={imageData.url}
-                alt={imageData.alt || content.title}
-                className="max-w-full h-auto rounded-lg shadow-lg"
-              />
-            )}
-            {imageData?.caption && (
-              <p className="text-sm text-gray-600 italic text-center">{imageData.caption}</p>
-            )}
-          </div>
-        );
-      
-      case 'link':
-        const linkData = getData(content, 'link');
-        return (
-          <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <div className="flex items-start space-x-3">
-              <ExternalLink className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
-              <div className="flex-1">
-                <a
-                  href={linkData?.url || '#'}
-                  target={linkData?.openInNewTab !== false ? '_blank' : '_self'}
-                  rel={linkData?.openInNewTab !== false ? 'noopener noreferrer' : ''}
-                  className="text-lg font-medium text-blue-700 hover:text-blue-900 hover:underline"
-                >
-                  {linkData?.title || linkData?.url || 'External Link'}
-                </a>
-                {linkData?.description && (
-                  <p className="mt-1 text-sm text-gray-600">{linkData.description}</p>
-                )}
-              </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    
+    case 'image':
+      const imageData = getData(content, 'image');
+      return (
+        <div className="space-y-2">
+          {imageData?.url && (
+            <img
+              src={imageData.url}
+              alt={imageData.alt || content.title}
+              className="max-w-full h-auto rounded-lg shadow-lg"
+            />
+          )}
+          {imageData?.caption && (
+            <p className="text-sm text-gray-600 italic text-center">{imageData.caption}</p>
+          )}
+        </div>
+      );
+    
+    case 'link':
+      const linkData = getData(content, 'link');
+      return (
+        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="flex items-start space-x-3">
+            <ExternalLink className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
+            <div className="flex-1">
+              <a
+                href={linkData?.url || '#'}
+                target={linkData?.openInNewTab !== false ? '_blank' : '_self'}
+                rel={linkData?.openInNewTab !== false ? 'noopener noreferrer' : ''}
+                className="text-lg font-medium text-blue-700 hover:text-blue-900 hover:underline"
+              >
+                {linkData?.title || linkData?.url || 'External Link'}
+              </a>
+              {linkData?.description && (
+                <p className="mt-1 text-sm text-gray-600">{linkData.description}</p>
+              )}
             </div>
           </div>
-        );
-      
-      default:
-        return <div className="text-gray-500">Content not available</div>;
-    }
-  };
-
+        </div>
+      );
+    
+    default:
+      return <div className="text-gray-500">Content not available</div>;
+  }
+};
   const renderTopic = (topic: Topic, level: number = 0) => {
     const hasContent = topic.contents && topic.contents.length > 0;
     const hasSubtopics = topic.subTopics && topic.subTopics.length > 0;

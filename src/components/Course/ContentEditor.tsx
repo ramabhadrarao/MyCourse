@@ -62,6 +62,40 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
     { value: 'bordered', label: 'Bordered' },
   ];
 
+  // Quill modules configuration with all formatting options
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'font': [] }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'align': [] }],
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+    clipboard: {
+      matchVisual: false
+    }
+  };
+
+  // Quill formats
+  const quillFormats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike',
+    'color', 'background',
+    'script',
+    'list', 'bullet', 'check', 'indent',
+    'direction', 'align',
+    'blockquote', 'code-block',
+    'link', 'image', 'video'
+  ];
+
   useEffect(() => {
     // Initialize data based on content type
     if (!content || !content.data) {
@@ -170,6 +204,12 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
   const handleSave = async () => {
     if (!contentData.title.trim()) {
       toast.error('Please enter a content title');
+      return;
+    }
+
+    // Validate content based on type
+    if (contentData.type === 'text' && !contentData.data.text?.trim()) {
+      toast.error('Please add some content');
       return;
     }
 
@@ -480,28 +520,27 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
       case 'text':
         return (
           <div className="space-y-4">
-            <ReactQuill
-              theme="snow"
-              value={contentData.data.text || ''}
-              onChange={(value) =>
-                setContentData(prev => ({
-                  ...prev,
-                  data: { text: value },
-                }))
-              }
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, 3, false] }],
-                  ['bold', 'italic', 'underline', 'strike'],
-                  [{ list: 'ordered' }, { list: 'bullet' }],
-                  ['blockquote', 'code-block'],
-                  ['link', 'image'],
-                  [{ color: [] }, { background: [] }],
-                  ['clean'],
-                ],
-              }}
-              style={{ height: '300px' }}
-            />
+            <div className="min-h-[400px]">
+              <ReactQuill
+                theme="snow"
+                value={contentData.data.text || ''}
+                onChange={(value) =>
+                  setContentData(prev => ({
+                    ...prev,
+                    data: { text: value },
+                  }))
+                }
+                modules={quillModules}
+                formats={quillFormats}
+                className="h-full"
+                style={{ minHeight: '350px' }}
+              />
+            </div>
+            <div className="text-sm text-gray-500 mt-12 pt-4">
+              <p>• Use the toolbar above to format your text (bold, italic, lists, etc.)</p>
+              <p>• All formatting will be preserved when saving</p>
+              <p>• You can paste formatted content from other sources</p>
+            </div>
           </div>
         );
 

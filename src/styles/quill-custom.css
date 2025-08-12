@@ -1,0 +1,156 @@
+/* src/styles/quill-custom.css */
+
+/* Adjust Quill editor height */
+.ql-container {
+  min-height: 300px;
+  font-size: 16px;
+}
+
+.ql-editor {
+  min-height: 300px;
+}
+
+/* Ensure lists maintain proper formatting */
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 1.5em;
+}
+
+.ql-editor li {
+  padding-left: 0.5em;
+}
+
+/* Preserve spacing between paragraphs */
+.ql-editor p {
+  margin-bottom: 1em;
+}
+
+/* Headers spacing */
+.ql-editor h1 {
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+}
+
+.ql-editor h2 {
+  font-size: 1.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+}
+
+.ql-editor h3 {
+  font-size: 1.17em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* Code blocks */
+.ql-editor pre {
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.ql-editor code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+/* Blockquotes */
+.ql-editor blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin-left: 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* Links */
+.ql-editor a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.ql-editor a:hover {
+  color: #1d4ed8;
+}
+
+/* Ensure proper rendering in view mode */
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.625em;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.625em;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose ul ul,
+.prose ul ol,
+.prose ol ul,
+.prose ol ol {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.prose hr {
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+/* Additional styles for enhanced features */
+
+/* Emoji picker */
+.ql-emoji-panel {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Better tables */
+.qlbt-operation-menu {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Formula/Math */
+.ql-formula {
+  background-color: #f5f5f5;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+/* Mentions */
+.mention {
+  background-color: #e8f4fd;
+  color: #1890ff;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Custom toolbar buttons */
+.ql-hr::after {
+  content: '―';
+}
+
+.ql-pagebreak::after {
+  content: '⎯';
+}
+
+/* Find & Replace highlight */
+.ql-find-highlight {
+  background-color: yellow;
+}
+
+/* Templates dropdown */
+.ql-templates {
+  width: 120px !important;
+}
