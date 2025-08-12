@@ -7,6 +7,8 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'react-quill/dist/quill.snow.css';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Content {
   _id?: string;
   title: string;
@@ -199,8 +201,8 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
 
     try {
       const endpoint = contentData._id 
-        ? `http://localhost:5000/api/content/${contentData._id}`
-        : 'http://localhost:5000/api/content';
+        ? `${API_URL}/content/${contentData._id}`
+        : `${API_URL}/content`;
       
       const method = contentData._id ? 'put' : 'post';
       
@@ -259,7 +261,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await axios.post('http://localhost:5000/api/content/upload', formData, {
+      const response = await axios.post(`${API_URL}/content/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('token')}`

@@ -4,6 +4,8 @@ import { Search, Filter, BookOpen, Users, Star } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Course {
   _id: string;
   title: string;
@@ -41,7 +43,7 @@ const Home: React.FC = () => {
       if (selectedCategory) params.append('category', selectedCategory);
       if (selectedLevel) params.append('level', selectedLevel);
 
-      const response = await axios.get(`http://localhost:5000/api/courses?${params}`);
+      const response = await axios.get(`${API_URL}/courses?${params}`);
       setCourses(response.data.courses);
     } catch (error) {
       toast.error('Failed to fetch courses');
@@ -159,7 +161,7 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                     <div className="text-lg font-bold text-gray-900">
-                      ${course.price}
+                      ₹{course.price}
                     </div>
                   </div>
                 </div>

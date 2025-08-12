@@ -6,6 +6,8 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import ContentEditor from '../../components/Course/ContentEditor';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Course {
   _id: string;
   title: string;
@@ -49,7 +51,7 @@ const EditCourse: React.FC = () => {
 
   const fetchCourse = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/courses/${id}`);
+      const response = await axios.get(`${API_URL}/courses/${id}`);
       setCourse(response.data.course);
     } catch (error) {
       toast.error('Failed to fetch course');
@@ -61,7 +63,7 @@ const EditCourse: React.FC = () => {
 
   const updateCourse = async (updates: Partial<Course>) => {
     try {
-      await axios.put(`http://localhost:5000/api/courses/${id}`, updates);
+      await axios.put(`${API_URL}/courses/${id}`, updates);
       setCourse(prev => prev ? { ...prev, ...updates } : null);
       toast.success('Course updated successfully');
     } catch (error) {
@@ -73,7 +75,7 @@ const EditCourse: React.FC = () => {
     if (!newTopicTitle.trim()) return;
     
     try {
-      const response = await axios.post('http://localhost:5000/api/content/topics', {
+      const response = await axios.post(`${API_URL}/content/topics`, {
         title: newTopicTitle,
         courseId: id,
         order: (course?.topics?.length || 0) + 1
@@ -94,7 +96,7 @@ const EditCourse: React.FC = () => {
 
   const updateTopic = async (topicId: string, title: string) => {
     try {
-      await axios.put(`http://localhost:5000/api/content/topics/${topicId}`, { title });
+      await axios.put(`${API_URL}/content/topics/${topicId}`, { title });
       
       setCourse(prev => prev ? {
         ...prev,
@@ -116,7 +118,7 @@ const EditCourse: React.FC = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/content/topics/${topicId}`);
+      await axios.delete(`${API_URL}/content/topics/${topicId}`);
       
       setCourse(prev => prev ? {
         ...prev,
@@ -163,7 +165,7 @@ const EditCourse: React.FC = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/content/${contentId}`);
+      await axios.delete(`${API_URL}/content/${contentId}`);
       
       setCourse(prev => {
         if (!prev) return null;
@@ -436,7 +438,7 @@ const EditCourse: React.FC = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Price ($)
+                    Price (₹)
                   </label>
                   <input
                     type="number"

@@ -5,6 +5,8 @@ import { Users, Search, UserCheck, UserX, ArrowLeft, Mail } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Student {
   _id: string;
   name: string;
@@ -34,7 +36,7 @@ const StudentManagement: React.FC = () => {
         params.append('isActive', filterStatus === 'active' ? 'true' : 'false');
       }
 
-      const response = await axios.get(`http://localhost:5000/api/users?${params}`);
+      const response = await axios.get(`${API_URL}/users?${params}`);
       setStudents(response.data.users);
     } catch (error) {
       toast.error('Failed to fetch students');
@@ -45,7 +47,7 @@ const StudentManagement: React.FC = () => {
 
   const toggleStudentStatus = async (studentId: string, currentStatus: boolean) => {
     try {
-      await axios.put(`http://localhost:5000/api/users/${studentId}/status`, {
+      await axios.put(`${API_URL}/users/${studentId}/status`, {
         isActive: !currentStatus
       });
 

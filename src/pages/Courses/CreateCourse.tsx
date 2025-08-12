@@ -4,6 +4,8 @@ import { BookOpen, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 const CreateCourse: React.FC = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -30,7 +32,7 @@ const CreateCourse: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/courses', {
+      const response = await axios.post(`${API_URL}/courses`, {
         ...formData,
         price: parseFloat(formData.price),
       });
@@ -102,7 +104,7 @@ const CreateCourse: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                  Price ($)
+                  Price (₹)
                 </label>
                 <input
                   type="number"

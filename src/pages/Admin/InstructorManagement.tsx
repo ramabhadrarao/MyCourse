@@ -5,6 +5,8 @@ import { Users, Search, UserCheck, UserX, ArrowLeft, Mail, Key, CheckCircle, XCi
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Instructor {
   _id: string;
   name: string;
@@ -42,7 +44,7 @@ const InstructorManagement: React.FC = () => {
         params.append('isActive', 'false');
       }
 
-      const response = await axios.get(`http://localhost:5000/api/users?${params}`);
+      const response = await axios.get(`${API_URL}/users?${params}`);
       setInstructors(response.data.users);
     } catch (error) {
       toast.error('Failed to fetch instructors');
@@ -53,7 +55,7 @@ const InstructorManagement: React.FC = () => {
 
   const approveInstructor = async (instructorId: string) => {
     try {
-      await axios.put(`http://localhost:5000/api/users/${instructorId}/status`, {
+      await axios.put(`${API_URL}/users/${instructorId}/status`, {
         isApproved: true
       });
 
@@ -71,7 +73,7 @@ const InstructorManagement: React.FC = () => {
 
   const toggleInstructorStatus = async (instructorId: string, currentStatus: boolean) => {
     try {
-      await axios.put(`http://localhost:5000/api/users/${instructorId}/status`, {
+      await axios.put(`${API_URL}/users/${instructorId}/status`, {
         isActive: !currentStatus
       });
 
@@ -93,7 +95,7 @@ const InstructorManagement: React.FC = () => {
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/users/${instructorId}/reset-password`);
+      await axios.put(`${API_URL}/users/${instructorId}/reset-password`);
       toast.success('Password reset to: Password123');
     } catch (error) {
       toast.error('Failed to reset password');

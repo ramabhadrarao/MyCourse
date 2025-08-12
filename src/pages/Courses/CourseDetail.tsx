@@ -6,6 +6,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Course {
   _id: string;
   title: string;
@@ -72,7 +74,7 @@ const CourseDetail: React.FC = () => {
 
   const fetchCourse = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/courses/${id}`);
+      const response = await axios.get(`${API_URL}/courses/${id}`);
       setCourse(response.data.course);
     } catch (error) {
       toast.error('Failed to fetch course details');
@@ -127,7 +129,7 @@ const CourseDetail: React.FC = () => {
 
     setEnrolling(true);
     try {
-      await axios.post(`http://localhost:5000/api/courses/${id}/enroll`);
+      await axios.post(`${API_URL}/courses/${id}/enroll`);
       setCourse(prev => prev ? {
         ...prev,
         students: [...prev.students, user._id]
@@ -507,7 +509,7 @@ const CourseDetail: React.FC = () => {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow-xl p-6 text-gray-900">
                 <div className="text-3xl font-bold text-center mb-4">
-                  ${course.price}
+                  ₹{course.price}
                 </div>
                 
                 {user ? (

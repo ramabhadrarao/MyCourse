@@ -5,6 +5,8 @@ import { BookOpen, Plus, Users, Edit, Trash2 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Course {
   _id: string;
   title: string;
@@ -34,7 +36,7 @@ const Dashboard: React.FC = () => {
 
   const fetchInstructorCourses = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/courses/instructor/my');
+      const response = await axios.get(`${API_URL}/courses/instructor/my`);
       setCourses(response.data.courses);
     } catch (error) {
       toast.error('Failed to fetch courses');
@@ -61,7 +63,7 @@ const Dashboard: React.FC = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${courseId}`);
+      await axios.delete(`${API_URL}/courses/${courseId}`);
       setCourses(courses.filter(course => course._id !== courseId));
       toast.success('Course deleted successfully');
     } catch (error) {
@@ -71,7 +73,7 @@ const Dashboard: React.FC = () => {
 
   const togglePublishCourse = async (courseId: string, published: boolean) => {
     try {
-      await axios.put(`http://localhost:5000/api/courses/${courseId}`, {
+      await axios.put(`${API_URL}/courses/${courseId}`, {
         published: !published
       });
       
@@ -222,7 +224,7 @@ const Dashboard: React.FC = () => {
                     </p>
                     
                     <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                      <span>${course.price}</span>
+                      <span>₹{course.price}</span>
                       <span>{course.students.length} students</span>
                     </div>
 

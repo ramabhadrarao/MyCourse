@@ -5,6 +5,8 @@ import { Users, UserCheck, UserX, BookOpen, Shield, Activity } from 'lucide-reac
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const API_URL = `${import.meta.env.VITE_SERVER_URL}/api`;
+
 interface Stats {
   totalUsers: number;
   totalStudents: number;
@@ -32,8 +34,8 @@ const AdminDashboard: React.FC = () => {
   const fetchStats = async () => {
     try {
       const [usersResponse, coursesResponse] = await Promise.all([
-        axios.get('http://localhost:5000/api/users'),
-        axios.get('http://localhost:5000/api/courses')
+        axios.get(`${API_URL}/users`),
+        axios.get(`${API_URL}/courses`)
       ]);
 
       const users = usersResponse.data.users;
@@ -209,4 +211,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;  
+export default AdminDashboard;
